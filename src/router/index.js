@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
+import Bank from '../views/Bank.vue'
+import Employees from '../views/Employees.vue'
+import EditEmployees from "../views/EditEmployees";
 
 Vue.use(VueRouter)
 
@@ -25,6 +28,21 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register
+  },
+  {
+    path: "/bank",
+    name: "Bank",
+    component: Bank
+  },
+  {
+    path: "/employees",
+    name: "Employees",
+    component: Employees
+  },
+  {
+    path: "/editemployees/:id",
+    name: "EditEmployees",
+    component:EditEmployees
   }
 ]
 
