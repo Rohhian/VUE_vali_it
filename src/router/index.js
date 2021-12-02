@@ -4,7 +4,8 @@ import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
 import Bank from '../views/Bank.vue'
 import Employees from '../views/Employees.vue'
-import EditEmployees from "../views/EditEmployees";
+import EditEmployees from "../views/EditEmployees"
+import AddEmployee from "../views/AddEmployee"
 
 Vue.use(VueRouter)
 
@@ -43,7 +44,12 @@ const routes = [
     path: "/editemployees/:id",
     name: "EditEmployees",
     component:EditEmployees
-  }
+  },
+  {
+    path: "/addemployee",
+    name: "AddEmployee",
+    component:AddEmployee
+  },
 ]
 
 const router = new VueRouter({
