@@ -4,13 +4,10 @@
     <h1>The Bank</h1>
     <br>
     <input v-model="accountNr" placeholder="account nr"/>
-    <button id="lock" v-on:click="lock()">Lock</button>
-    <button id="unlock" v-on:click="unlock()">Unlock</button>
     <br>
     <button v-on:click="getBalance()">Get Account Balance</button>
     <button v-on:click="getAccInfo()">Get Account Info</button>
-    <button v-on:click="getTransHist()">Get Account Transaction History</button>
-    <button v-on:click="getLockStatus()">Get Account LockStatus</button>
+    <!--    <button v-on:click="getLockStatus()">Get Account LockStatus</button>-->
     <br>
     account balance is: {{ balance }}
     <br>
@@ -58,6 +55,11 @@
       </tr>
       <tr v-for="row in allAccounts">
         <td v-for="cell in row">{{ cell }}</td>
+        <td>
+          <button id="lock" v-on:click="lock(row.accountNr)">Lock</button>
+          <button id="unlock" v-on:click="unlock(row.accountNr)">Unlock</button>
+          <button v-on:click="getTransHist(row.accountNr)">Transaction History</button>
+        </td>
       </tr>
       <tr v-show="accInfo.length>0">
         <th>ClientID</th>
@@ -84,6 +86,9 @@
       <tr v-for="row in allTransInfo">
         <td v-for="cell in row">{{ cell }}</td>
       </tr>
+    </table>
+    <hr>
+    <table>
       <tr v-show="accTransHist.length>0">
         <th>TransactionID</th>
         <th>AccountNR</th>
@@ -97,7 +102,6 @@
       <tr v-for="row in accTransHist">
         <td v-for="cell in row">{{ cell }}</td>
       </tr>
-
     </table>
     <br><br>
   </div>
@@ -146,18 +150,18 @@ export default {
             this.balance = response.data
           })
     },
-    getLockStatus: function () {
-      this.$http.get('api/lesson4/bank/lock/' + this.accountNr)
-          .then(response => {
-            this.lockstatus = response.data
-            if (this.lockstatus) {
-              this.lockstatus = "Account is Locked"
-            }
-            if (!this.lockstatus) {
-              this.lockstatus = "Account is Unlocked"
-            }
-          })
-    },
+    // getLockStatus: function () {
+    //   this.$http.get('api/lesson4/bank/lock/' + this.accountNr)
+    //       .then(response => {
+    //         this.lockstatus = response.data
+    //         if (this.lockstatus) {
+    //           this.lockstatus = "Account is Locked"
+    //         }
+    //         if (!this.lockstatus) {
+    //           this.lockstatus = "Account is Unlocked"
+    //         }
+    //       })
+    // },
     getAccInfo: function () {
       this.$http.get('api/lesson4/bank/getAccInfo/' + this.accountNr)
           .then(response => {
@@ -179,12 +183,12 @@ export default {
             this.allTransInfo = response.data
           })
     },
-    getTransHist: function () {
-      this.$http.get('api/lesson4/bank/getTransInfo/' + this.accountNr)
+    getTransHist: function (id) {
+      this.$http.get('api/lesson4/bank/getTransInfo/' + id)
           .then(response => {
-            this.allAccounts = []
-            this.accInfo = []
-            this.allTransInfo = []
+            // this.allAccounts = []
+            // this.accInfo = []
+            // this.allTransInfo = []
             this.accTransHist = response.data
           })
     },
@@ -218,18 +222,23 @@ export default {
             this.vastus4 = response.data
           })
     },
-    lock: function () {
-      this.$http.post('api/lesson4/bank/lock/' + this.accountNr)
+    lock: function (lockid) {
+      this.$http.post('api/lesson4/bank/lock/' + lockid)
           .then(response => {
             this.lockstatus = response.data
+            this.getAllAccounts()
           })
     },
-    unlock: function () {
-      this.$http.post('api/lesson4/bank/unlock/' + this.accountNr)
+    unlock: function (unlockid) {
+      this.$http.post('api/lesson4/bank/unlock/' + unlockid)
           .then(response => {
             this.lockstatus = response.data
+            this.getAllAccounts()
           })
     }
+  },
+  mounted() {
+    this.getAllAccounts();
   }
 }
 
