@@ -11,6 +11,8 @@
 
 <script>
 
+import router from "@/router";
+
 export default {
   data: function () {
     return {
@@ -23,7 +25,7 @@ export default {
       this.$http.post('/employeeapi/workers', this.looEmployee)
           .then(response => {
             this.vastus1 = response.data
-            this.getAllEmployees()
+            router.push({name: 'Employees'})
           })
     },
   }

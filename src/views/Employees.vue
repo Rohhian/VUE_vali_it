@@ -5,13 +5,16 @@
     <span>{{ vastus1 }}</span>
     <br><br>
     <button v-on:click="addEmployee()">Add Employee</button>
+    <br>
+    <input v-model="search">
+    <button v-on:click="getAllEmployees()">Search</button>
     <table>
       <tr v-show="allEmployees.length>0">
-        <th>ID</th>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Position</th>
-        <th>Address</th>
+        <th v-on:click="orderBy('id')">ID</th>
+        <th v-on:click="orderBy('first_name')">Firstname</th>
+        <th v-on:click="orderBy('last_name')">Lastname</th>
+        <th v-on:click="orderBy('position')">Position</th>
+        <th v-on:click="orderBy('address')">Address</th>
       </tr>
       <tr v-for="row in allEmployees">
         <td v-for="cell in row">{{ cell }}</td>
@@ -36,11 +39,15 @@ export default {
       employeeId: "",
       employeeIdmuuda: "",
       muudaEmployee: {},
+      search: "",
+      orderByField: "",
     }
   },
   methods: {
     getAllEmployees: function () {
-      this.$http.get('/employeeapi/workers')
+      this.$http.get('/employeeapi/workers', {
+        params: {search: this.search, orderBy: this.orderByField}
+      })
           .then(response => {
             this.allEmployees = response.data
           })
@@ -57,7 +64,11 @@ export default {
     },
     addEmployee: function () {
       router.push({name: 'AddEmployee'});
-    }
+    },
+    orderBy: function (field) {
+      this.orderByField = field
+      this.getAllEmployees()
+    },
   },
   mounted() {
     this.getAllEmployees();
