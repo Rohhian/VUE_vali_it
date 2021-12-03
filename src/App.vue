@@ -33,4 +33,7 @@
   color: #42b983;
 }
 
+body {
+  background-color: burlywood;
+}
 </style>

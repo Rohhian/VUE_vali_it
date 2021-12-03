@@ -42,7 +42,6 @@
     <button v-on:click="getAllTrans()">Get All Transactions</button>
     <br><br>
     <hr>
-    <br>
     <table>
       <tr v-show="allAccounts.length>0">
         <th>ClientID</th>
@@ -59,7 +58,25 @@
           <button id="lock" v-on:click="lock(row.accountNr)">Lock</button>
           <button id="unlock" v-on:click="unlock(row.accountNr)">Unlock</button>
           <button v-on:click="getTransHist(row.accountNr)">Transaction History</button>
+          <button v-on:click="deleteAccount(row.clientId)">Delete Client if Any Null</button>
         </td>
+      </tr>
+
+    </table>
+    <hr>
+    <table>
+      <tr v-show="accTransHist.length>0">
+        <th>TransactionID</th>
+        <th>AccountNR</th>
+        <th>Deposit</th>
+        <th>Withdraw</th>
+        <th>AccountFROM</th>
+        <th>AmountIN</th>
+        <th>AccountTO</th>
+        <th>AmountOUT</th>
+      </tr>
+      <tr v-for="row in accTransHist">
+        <td v-for="cell in row">{{ cell }}</td>
       </tr>
       <tr v-show="accInfo.length>0">
         <th>ClientID</th>
@@ -87,22 +104,6 @@
         <td v-for="cell in row">{{ cell }}</td>
       </tr>
     </table>
-    <hr>
-    <table>
-      <tr v-show="accTransHist.length>0">
-        <th>TransactionID</th>
-        <th>AccountNR</th>
-        <th>Deposit</th>
-        <th>Withdraw</th>
-        <th>AccountFROM</th>
-        <th>AmountIN</th>
-        <th>AccountTO</th>
-        <th>AmountOUT</th>
-      </tr>
-      <tr v-for="row in accTransHist">
-        <td v-for="cell in row">{{ cell }}</td>
-      </tr>
-    </table>
     <br><br>
   </div>
 </template>
@@ -120,6 +121,7 @@ export default {
       transferTO: "",
       transferAMOUNT: "",
       lockstatus: "",
+      deletestatus: "",
       accInfo: {},
       allTransInfo: {},
       accTransHist: {},
@@ -130,7 +132,9 @@ export default {
       vastus3: "",
       vastus4: "",
       vastus5: "",
-      amount: ""
+      amount: "",
+      firstName: "",
+      lastName: "",
 
     }
   },
@@ -138,9 +142,9 @@ export default {
     getAllAccounts: function () {
       this.$http.get('api/lesson4/bank/listAll')
           .then(response => {
-            this.accInfo = []
-            this.allTransInfo = []
-            this.accTransHist = []
+            // this.accInfo = []
+            // this.allTransInfo = []
+            // this.accTransHist = []
             this.allAccounts = response.data
           })
     },
@@ -165,7 +169,7 @@ export default {
     getAccInfo: function () {
       this.$http.get('api/lesson4/bank/getAccInfo/' + this.accountNr)
           .then(response => {
-            this.allAccounts = []
+            // this.allAccounts = []
             this.allTransInfo = []
             this.accTransHist = []
             this.accInfo = response.data
@@ -177,7 +181,7 @@ export default {
     getAllTrans: function () {
       this.$http.get('api/lesson4/bank/listAllTransactions')
           .then(response => {
-            this.allAccounts = []
+            // this.allAccounts = []
             this.accInfo = []
             this.accTransHist = []
             this.allTransInfo = response.data
@@ -187,8 +191,8 @@ export default {
       this.$http.get('api/lesson4/bank/getTransInfo/' + id)
           .then(response => {
             // this.allAccounts = []
-            // this.accInfo = []
-            // this.allTransInfo = []
+            this.accInfo = []
+            this.allTransInfo = []
             this.accTransHist = response.data
           })
     },
@@ -233,6 +237,13 @@ export default {
       this.$http.post('api/lesson4/bank/unlock/' + unlockid)
           .then(response => {
             this.lockstatus = response.data
+            this.getAllAccounts()
+          })
+    },
+    deleteAccount: function (id) {
+      this.$http.delete('api/lesson4/bank/delete/' + id)
+          .then(response => {
+            this.deletestatus = response.data
             this.getAllAccounts()
           })
     }
