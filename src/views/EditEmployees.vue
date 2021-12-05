@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editemployee">
     Firstname: <input v-model="muudaEmployee.first_name"> <br>
     Lastname: <input v-model="muudaEmployee.last_name"> <br>
     Position: <input v-model="muudaEmployee.position"> <br>
@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 table {
   margin-left: auto;
   margin-right: auto;

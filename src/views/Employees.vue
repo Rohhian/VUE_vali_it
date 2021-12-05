@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="employees">
     <hr>
     <h2>All Employees List</h2><br>
     <span>{{ vastus1 }}</span>
@@ -77,6 +77,5 @@ export default {
 </script>
 
 <style>
-
 
 </style>

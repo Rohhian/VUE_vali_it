@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bank">
     <hr>
     <h1>The Bank</h1>
     <br>
